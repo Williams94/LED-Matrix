@@ -43,6 +43,9 @@ void draw() {
   float recordX = 0;
   float recordD = 0;
   
+  System.out.println(img.height);
+  System.out.println(img.width);
+  
   for (int x = 0; x < img.width; x += skipX) {
     for (int y = 0; y < img.height; y += skipY) {
       int index = x + y * img.width;

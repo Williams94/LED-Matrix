@@ -27,16 +27,16 @@ void loop() {
 
   if (readString.length() > 0) {
     if (readString.indexOf('x') == 0) {
-      Serial.println(readString.substring(readString.indexOf('x') + 1, readString.length()));
+      Serial.println('x' + readString.substring(readString.indexOf('x') + 1, readString.length()));
       x = readString.substring(readString.indexOf('x'), readString.length()).toInt();
     }
     if (readString.indexOf('y') == 0) {
-      Serial.println(readString.substring(readString.indexOf('y') + 1, readString.length()));
-      x = readString.substring(readString.indexOf('y'), readString.length()).toInt();
+      Serial.println('y' + readString.substring(readString.indexOf('y') + 1, readString.length()));
+      y = readString.substring(readString.indexOf('y'), readString.length()).toInt();
     }
     if (readString.indexOf('d') == 0) {
-      Serial.println(readString.substring(readString.indexOf('d') + 1, readString.length()));
-      x = readString.substring(readString.indexOf('d'), readString.length()).toInt();
+      Serial.println('d' + readString.substring(readString.indexOf('d') + 1, readString.length()));
+      d = readString.substring(readString.indexOf('d'), readString.length()).toInt();
     }
     
     readString="";
