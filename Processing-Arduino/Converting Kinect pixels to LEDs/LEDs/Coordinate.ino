@@ -1,4 +1,4 @@
-#include <Math.h>
+#include <math.h>
 
 class Coordinate {
   
@@ -10,126 +10,125 @@ class Coordinate {
   int ledX, ledY;
   int ledNumber;
   
-  public::Coordinate(float x, float y, float d) {
-    this.x = x;
-    this.y = y;
-    this.d = d;
+  Coordinate::Coordinate(float x, float y, float d) {
+    this->x = x;
+    this->y = y;
+    this->d = d;
   }
 
-  public function runCoordinateConversion() : Coordinate {   
-    this.convertCoordinate();
-    this.calculateLedAddress();
-    return new Coordinate(this.getLedX(), this.getLedY(), this.getConvertedD());
+  runCoordinateConversion() {   
+    this->convertCoordinate();
+    this->calculateLedAddress();
   }
 
-  public function convertCoordinate() {
-    this.setConvertedX(this.convertX(this.getX());
-    this.setConvertedY(this.convertY(this.getY());
-    this.setConvertedD(this.convertD(this.getD());   
+  void convertCoordinate() {
+    this->setConvertedX(this->convertX(this->getX()));
+    this->setConvertedY(this->convertY(this->getY()));
+    this->setConvertedD(this->convertD(this->getD()));   
   }
 
-  public function calculateLedAddress() {
-    int x = this.calculateLedX();
+  void calculateLedAddress() {
+    int x = this->convertLedX();
     
-    if (this.getConvertedY() % 2 == 0) {
-      this.ledY = ((this.getConvertedY() * 10) - x);
+    if (this->getConvertedY() % 2 == 0) {
+      this->ledY = ((this->getConvertedY() * 10) - x);
     } else {
-      this.ledY = ((this.getConvertedY() * 10) + x);
+      this->ledY = ((this->getConvertedY() * 10) + x);
     }
   }
 
-  public function convertLedX() {
-    if (this.getConvertedX >= 1 && this.getConvertedX <= 10) {
-      return this.getConvertedX;
-    } else if (this.getConvertedX >= 11 && this.getConvertedX <= 20) {
-      return this.getConvertedX - 10;
-    } else if (this.getConvertedX >= 21 && this.getConvertedX <= 30) {
-      return this.getConvertedX - 20;
-    } else if (this.getConvertedX >= 31 && this.getConvertedX <= 40) {
-      return this.getConvertedX - 30;
-    } else if (this.getConvertedX >= 41 && this.getConvertedX <= 50) {
-      return this.getConvertedX - 40;
+  int convertLedX() {
+    if (this->getConvertedX() >= 1 && this->getConvertedX() <= 10) {
+      return this->getConvertedX();
+    } else if (this->getConvertedX() >= 11 && this->getConvertedX() <= 20) {
+      return this->getConvertedX() - 10;
+    } else if (this->getConvertedX() >= 21 && this->getConvertedX() <= 30) {
+      return this->getConvertedX() - 20;
+    } else if (this->getConvertedX() >= 31 && this->getConvertedX() <= 40) {
+      return this->getConvertedX() - 30;
+    } else if (this->getConvertedX() >= 41 && this->getConvertedX() <= 50) {
+      return this->getConvertedX() - 40;
     }
   }
   
-  public function convertX(float x) : int {    
-    int convertedX = Math.round((x / this.skipX));
+  int convertX(float x) {    
+    int convertedX = ceil((x / this->skipX));
     return convertedX;
   }
 
-  public function convertY(float y) : int {   
-    int convertedY = Math.round((y / this.skipY));
+  int convertY(float y) {   
+    int convertedY = ceil((y / this->skipY));
     convertedY = 20 - convertedY;   
     return convertedY;
   }
 
-  public function convertD(float d) : int {
+  int convertD(float d) {
     // Perform x coordinate conversion in here
-    return this.convertedD;
+    return this->convertedD;
   }
 
-  public function getX() : float {
-    return this.x;
+  float getX() {
+    return this->x;
   }
 
-  public function setX(float x) {
-    this.x = x;
+  void setX(float x) {
+    this->x = x;
   }
 
-  public function getY() : float {
-    return this.y;
+  float getY() {
+    return this->y;
   }
 
-  public function setY(float y) {
-    this.y = y;
+  void setY(float y) {
+    this->y = y;
   }
 
-  public function getD() : float {
-    return this.d;
+  float getD() {
+    return this->d;
   }
 
-  public function setD(float d) {
-    this.d = d;
+  void setD(float d) {
+    this->d = d;
   }
 
-  public function getConvertedX() : int {
-    return this.convertedX;
+  int getConvertedX() {
+    return this->convertedX;
   }
 
-  public function setConvertedX(int convertedX) {
-    this.convertedX = convertedX;
+  void setConvertedX(int convertedX) {
+    this->convertedX = convertedX;
   }
 
-  public function getConvertedY() : int {
-    return this.convertedY;
+  int getConvertedY() {
+    return this->convertedY;
   }
 
-  public function setConvertedY(int convertedY) {
-    this.convertedY = convertedY;
+  void setConvertedY(int convertedY) {
+    this->convertedY = convertedY;
   }
 
-  public function getConvertedD() : int {
-    return this.convertedD;
+  int getConvertedD() {
+    return this->convertedD;
   }
 
-  public function setConvertedD(int convertedD) {
-    this.convertedD = convertedD;
+  void setConvertedD(int convertedD) {
+    this->convertedD = convertedD;
   }
 
-  public function getLedX() : int {
-    return this.ledX;
+  int getLedX() {
+    return this->ledX;
   }
 
-  public function setX(int ledX) {
-    this.ledX = ledX;
+  void setX(int ledX) {
+    this->ledX = ledX;
   }
 
-  public function getLedY() : int {
-    return this.ledY;
+  int getLedY() {
+    return this->ledY;
   }
 
-  public function setLedY(int ledX) {
-    this.ledX = ledX;
+  void setLedY(int ledX) {
+    this->ledX = ledX;
   }
-}
+};
 
