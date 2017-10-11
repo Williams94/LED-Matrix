@@ -10,7 +10,7 @@ int x, y, d;
 String readString;
 
 void setup() { 
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+//  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   Serial.begin(9600);
 }
 
@@ -18,6 +18,7 @@ void loop() {
   while (Serial.available()) {
     delay(5);
     char c = Serial.read();
+    Serial.println(Serial.read());
     if (c == ',') {
 //     readString += c;
      break;

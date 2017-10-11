@@ -22,6 +22,8 @@ void setup() {
   kinect = new Kinect(this);
   kinect.initDepth();
   
+  printArray(Serial.list());
+  
   String portName = Serial.list()[arduinoPort];
   serialConnection = new Serial(this, portName, 9600);
 }
@@ -43,9 +45,6 @@ void draw() {
   float recordX = 0;
   float recordD = 0;
   
-  System.out.println(img.height);
-  System.out.println(img.width);
-  
   for (int x = 0; x < img.width; x += skipX) {
     for (int y = 0; y < img.height; y += skipY) {
       int index = x + y * img.width;
@@ -54,11 +53,15 @@ void draw() {
       float z = map(b, 0, 255, 255, -250);
       
       if (d > minThresh && d < maxThresh) {
-        String data = "x" + x + ",y" + y + ",d" + d;
+        String data = "x" + x + ",y" + y/* + ",d" + d*/;
+        //System.out.println(data);
         serialConnection.write(data);
         delay(100);
-        System.out.println(serialConnection.readString());
-        
+        //if (serialConnection.readString() != null) {
+        if (serialConnection.available() > 0) {
+          System.out.println(serialConnection.readString());
+        }           
+        //}
         //colorMode(RGB, threshRange + 30, 255, threshRange + 10);
         //fill(maxThresh - d, 20, d - minThresh);
         //pushMatrix();
