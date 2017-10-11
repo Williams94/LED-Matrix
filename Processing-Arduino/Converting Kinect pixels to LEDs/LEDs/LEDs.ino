@@ -64,15 +64,15 @@ void loop() {
   if (readString.length() > 0) {
     if (readString.indexOf('x') == 0) {
       x = (readString.substring(readString.indexOf('x') + 1, readString.length())).toInt();
-      Serial.println(x);
+//      Serial.println(x);
     }
     if (readString.indexOf('y') == 0) {
-//       Serial.println('y' + readString.substring(readString.indexOf('y') + 1, readString.length()));
-      y = readString.substring(readString.indexOf('y'), readString.length()).toInt();
+      y = (readString.substring(readString.indexOf('y') + 1, readString.length())).toInt();
+//      Serial.println(y);
     }
     if (readString.indexOf('d') == 0) {
-//       Serial.println('d' + readString.substring(readString.indexOf('d') + 1, readString.length()));
-      d = readString.substring(readString.indexOf('d'), readString.length()).toInt();
+      d = (readString.substring(readString.indexOf('d') + 1, readString.length())).toInt();
+//      Serial.println(d);
     }
     readString = "";
 
