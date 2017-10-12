@@ -11,6 +11,7 @@
 #define LED_END 1
 // NUMBER_OF_LEDS = (NUM_LEDS - (LED_START + LED_END));
 #define NUMBER_OF_LEDS 190
+#define LED_DELAY 100
 
 
 /*
@@ -19,6 +20,10 @@
  */
 float skipX = 12.8;
 float skipY = 25.2632;
+
+float minThresh = 150;
+float maxThresh = 500;
+float threshRange = maxThresh - minThresh;
 
 CRGB leds[NUMBER_OF_LEDS];
 
@@ -77,12 +82,10 @@ void loop() {
     readString = "";
 
     // When all coordinates have been sent through can convert them
-    if (x != -1 && y != -1/* && d != -1*/) {
+    if (x != -1 && y != -1 && d != -1) {
       // Run conversion and turn on led
       runCoordinateConversion();
-//      leds[ledNumber] = CRGB::Blue;     
-//      FastLED.show();
-//      delay(100);
+      convertDepthToRgbAndTurnOnLed(d);
 
       // Record which led's have been turned on
       ledNumbers[ledNumbersIndex] = ledNumber;
@@ -103,15 +106,12 @@ void loop() {
   }
 }
 
-/*
- * Turns an LED off
- */
-void ledOff(int i) {
-  leds[i] = CRGB::Black;
-  FastLED.show();
-  delay(100);  
-}
-
+/*******************************************************************************************************
+ * 
+ * Functions to convert Kinect coordinates into an ledAddress and find out which panel to use
+ * 
+ ******************************************************************************************************/
+ 
 /*
  * Runs the two conversion functions
  */
@@ -205,6 +205,92 @@ int convertD() {
   // Perform x coordinate conversion in here
   convertedD = d;
   return convertedD;
+}
+
+/*******************************************************************************************************
+ * 
+ * Functions for turning LEDs on and off with different colours and coversion of depth to color temp etc.
+ * 
+ ******************************************************************************************************/
+
+ /* 
+ * This is needed to skip the first number of LEDs 
+ */
+int applyLedStartingOffset(int ledAddress) {
+  return (ledAddress + LED_START);
+}
+
+/*
+ * Turns an LED off
+ */
+void ledOff(int i) {
+  // This is needed to skip the first number of LEDs
+  i += LED_START;
+  
+  leds[i] = CRGB::Black;
+  FastLED.show();
+  delay(LED_DELAY);  
+}
+
+/*
+ * Turns an LED on with the color Blue
+ */
+void ledOnBlue(int i) {
+  // This is needed to skip the first number of LEDs
+  i += LED_START;
+  
+  leds[i] = CRGB::Blue;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Green
+ */
+void ledOnGreen(int i) {
+  i = applyLedStartingOffset(i);
+  
+  leds[i] = CRGB::Green;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Red
+ */
+void ledOnRed(int i) {  
+  i = applyLedStartingOffset(i);
+  
+  leds[i] = CRGB::Red;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Red
+ */
+void ledOnRgb(int r, int g, int b) {  
+  i = applyLedStartingOffset(i);
+  
+  leds[i].setRGB(r, g, b);
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Converts depth to rgb and turns on led with that color
+ */
+void convertDepthToRgbAndTurnOnLed(int depth) {
+  // red is depth mapped from low to high e.g. closer = redder
+  int r = map(depth, minThresh, maxThresh, 0, 255);
+
+  // green can be used if needed
+//  int g = map(depth, minThresh, maxThresh, 0, 255);
+  int g = 100;
+
+  // red is depth mapped from high to low e.g. further away = bluer
+  int b = map(depth, maxThresh, minThresh, 0, 255);
+  ledOnRgb(r, g, b);
 }
 
 
