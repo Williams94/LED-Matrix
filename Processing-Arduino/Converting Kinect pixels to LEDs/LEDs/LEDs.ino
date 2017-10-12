@@ -1,104 +1,152 @@
 #include "FastLED.h"
 #include <math.h>
 
-#define NUMBER_OF_LEDS_TO_KEEP_TRACK_OF 200
-
+/*
+ * Set number of LEDs and data pins here
+ */
 #define NUM_LEDS 10
+//#define NUM_LEDS 200
 #define DATA_PIN 6
+#define LED_START 9
+#define LED_END 1
+// NUMBER_OF_LEDS = (NUM_LEDS - (LED_START + LED_END));
+#define NUMBER_OF_LEDS 190
+#define LED_DELAY 100
 
-CRGB leds[NUM_LEDS];
 
-int x, y, d;
-int convertedX, convertedY, convertedD;
-int ledX, ledY;
-int ledNumber;
-int[NUMBER_OF_LEDS_TO_KEEP_TRACK_OF] ledNumbers;
-int ledNumbersIndex = 0;
-
+/*
+ * skipX = kinectWidth / number of leds on the X axis
+ * skipX = kinectHeight / number of leds on the Y axis
+ */
 float skipX = 12.8;
 float skipY = 25.2632;
 
+float minThresh = 150;
+float maxThresh = 500;
+float threshRange = maxThresh - minThresh;
+
+CRGB leds[NUMBER_OF_LEDS];
+
+/*
+ * Variables
+ */
+int x, y, d = -1;
+int convertedX, convertedY, convertedD;
+int ledX, ledY;
+int ledNumber;
+int ledNumbers[NUMBER_OF_LEDS];
+int ledNumbersIndex = 0;
+int panelNumber;
+
 String readString;
 
+/*
+ * Setup with LED Strips and Serial
+ */
 void setup() { 
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+//  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUMBER_OF_LEDS);
   Serial.begin(9600);
 }
 
+/*
+ * Main loop to recieve Kinect data and convert it into an LED address to turn on
+ */
 void loop() {
-  while (Serial.available()) {
+  // Serial connection gets through the x, y and d coordinates
+  while (Serial.available()) {    
     delay(5);
     char c = Serial.read();
+//
+//    // When we reach the end of the string we can use it
     if (c == ',') {
-//     readString += c;
+////     readString += c;
      break;
     }  
     readString += c;
   }
 
+  // When there is a string to read, figure out which coordinate it is
   if (readString.length() > 0) {
     if (readString.indexOf('x') == 0) {
-      Serial.println('x' + readString.substring(readString.indexOf('x') + 1, readString.length()));
-      x = readString.substring(readString.indexOf('x'), readString.length()).toInt();
+      x = (readString.substring(readString.indexOf('x') + 1, readString.length())).toInt();
+//      Serial.println(x);
     }
     if (readString.indexOf('y') == 0) {
-      Serial.println('y' + readString.substring(readString.indexOf('y') + 1, readString.length()));
-      y = readString.substring(readString.indexOf('y'), readString.length()).toInt();
+      y = (readString.substring(readString.indexOf('y') + 1, readString.length())).toInt();
+//      Serial.println(y);
     }
     if (readString.indexOf('d') == 0) {
-      Serial.println('d' + readString.substring(readString.indexOf('d') + 1, readString.length()));
-      d = readString.substring(readString.indexOf('d'), readString.length()).toInt();
+      d = (readString.substring(readString.indexOf('d') + 1, readString.length())).toInt();
+//      Serial.println(d);
     }
     readString = "";
-    
-    if (x !== null && y !== null && d !== null) {
+
+    // When all coordinates have been sent through can convert them
+    if (x != -1 && y != -1 && d != -1) {
+      // Run conversion and turn on led
       runCoordinateConversion();
-      leds[ledNumber] = CRGB::Blue;
-      FastLED.show();
-      delay(100);
-      
+      convertDepthToRgbAndTurnOnLed(d);
+
+      // Record which led's have been turned on
       ledNumbers[ledNumbersIndex] = ledNumber;
       ledNumbersIndex++;
-      if (ledNumbersIndex == NUMBER_OF_LEDS_TO_KEEP_TRACK_OF) {
+
+      // When the led array index reaches the max (currently set to 1 panels worth of LEDs)
+      // turn the off first LED and set the index back to the first led
+      if (ledNumbersIndex == NUMBER_OF_LEDS) {
         ledNumbersIndex = 0;
-        ledOff(0);
+//        ledOff(0);
       } else {
-        ledOff(ledNumbersIndex + 1);
+//        ledOff(ledNumbersIndex + 1);
       }
-      
-      x, y, d = null;
-    } 
+
+      // Set coorindates back to -1 so we can track them again from Kinect
+      x, y, d = -1;
+    }    
   }
 }
 
-void ledOff(int i) {
-  leds[i] = CRGB::Black;
-  FastLED.show();
-  delay(100);  
-}
-
+/*******************************************************************************************************
+ * 
+ * Functions to convert Kinect coordinates into an ledAddress and find out which panel to use
+ * 
+ ******************************************************************************************************/
+ 
+/*
+ * Runs the two conversion functions
+ */
 void runCoordinateConversion() {   
   convertCoordinate();
   calculateLedAddress();
 }
 
+/*
+ * Calculate converted coordinates and set panel number
+ */
 void convertCoordinate() {
-  convertedX = convertX(x);
+  convertedX = convertX();
   setPanel();
-  convertedY = convertY(y);
-  convertedD = convertD(d);
+  convertedY = convertY();
+  convertedD = convertD();  
 }
 
+/*
+ * Calculates LED number based on ledX and ledY position, for even y LEDs 
+ * need to go back further since they zigzag and pixels do not
+ */
 void calculateLedAddress() {
   ledX = convertLedX();
   
   if (convertedY % 2 == 0) {
-    ledY = ((convertedY * 10) - ledX);
+    ledNumber = ((convertedY * 10) - ledX);
   } else {
-    ledY = ((convertedY * 10) + ledX);
+    ledNumber = ((convertedY * 10) - (10 -  ledX));
   }
 }
 
+/* 
+ * Get's local panels x instead of x for all panels 
+ */
 int convertLedX() {
   if (convertedX >= 1 && convertedX <= 10) {
     return convertedX;
@@ -113,22 +161,9 @@ int convertLedX() {
   }
 }
 
-int convertX(float x) {    
-  int convertedX = ceil((x / skipX));
-  return convertedX;
-}
-
-int convertY(float y) { 
-  int convertedY = ceil((y / skipY));
-  convertedY = 20 - convertedY;   
-  return convertedY;
-}
-
-int convertD(float d) {
-  // Perform x coordinate conversion in here
-  return convertedD;
-}
-
+/* 
+ * Sets Panel based on X position 
+ */
 void setPanel() {
     if (convertedX >= 1 && convertedX <= 10) {
       panelNumber = 1;
@@ -141,4 +176,121 @@ void setPanel() {
     } else if (convertedX >= 41 && convertedX <= 50) {
       panelNumber = 5;
     }
-  }
+}
+
+/*
+ * Conversion to x is divide by number of x pixels to skip to make Kinect 
+ * pixels fit to LED matrix dimensions (e.g. x=640/50  y=480/19)
+ */
+int convertX() {    
+  int convertedX = ceil((x / skipX));
+  return convertedX;
+}
+
+/*
+ * Conversion to y is the same as x except you need to invert the axis since
+ * Kinect's y=0 is at the top of the screen and the LED strips start with y=1 
+ * at the bottom
+ */
+int convertY() { 
+  int convertedY = ceil((y / skipY));
+  convertedY = 20 - convertedY;   
+  return convertedY;
+}
+
+/*
+ * Could do some color conversion here relating to how close the user is
+ */
+int convertD() {
+  // Perform x coordinate conversion in here
+  convertedD = d;
+  return convertedD;
+}
+
+/*******************************************************************************************************
+ * 
+ * Functions for turning LEDs on and off with different colours and coversion of depth to color temp etc.
+ * 
+ ******************************************************************************************************/
+
+ /* 
+ * This is needed to skip the first number of LEDs 
+ */
+int applyLedStartingOffset(int ledAddress) {
+  return (ledAddress + LED_START);
+}
+
+/*
+ * Turns an LED off
+ */
+void ledOff(int i) {
+  // This is needed to skip the first number of LEDs
+  i += LED_START;
+  
+  leds[i] = CRGB::Black;
+  FastLED.show();
+  delay(LED_DELAY);  
+}
+
+/*
+ * Turns an LED on with the color Blue
+ */
+void ledOnBlue(int i) {
+  // This is needed to skip the first number of LEDs
+  i += LED_START;
+  
+  leds[i] = CRGB::Blue;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Green
+ */
+void ledOnGreen(int i) {
+  i = applyLedStartingOffset(i);
+  
+  leds[i] = CRGB::Green;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Red
+ */
+void ledOnRed(int i) {  
+  i = applyLedStartingOffset(i);
+  
+  leds[i] = CRGB::Red;
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Turns an LED on with the color Red
+ */
+void ledOnRgb(int r, int g, int b) {  
+  i = applyLedStartingOffset(i);
+  
+  leds[i].setRGB(r, g, b);
+  FastLED.show();
+  delay(LED_DELAY);
+}
+
+/*
+ * Converts depth to rgb and turns on led with that color
+ */
+void convertDepthToRgbAndTurnOnLed(int depth) {
+  // red is depth mapped from low to high e.g. closer = redder
+  int r = map(depth, minThresh, maxThresh, 0, 255);
+
+  // green can be used if needed
+//  int g = map(depth, minThresh, maxThresh, 0, 255);
+  int g = 100;
+
+  // red is depth mapped from high to low e.g. further away = bluer
+  int b = map(depth, maxThresh, minThresh, 0, 255);
+  ledOnRgb(r, g, b);
+}
+
+
