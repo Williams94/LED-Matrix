@@ -77,10 +77,9 @@ void loop() {
     readString = "";
 
     // When all coordinates have been sent through can convert them
-    if (x != -1 && y != -1 && d != -1) {
+    if (x != -1 && y != -1/* && d != -1*/) {
       // Run conversion and turn on led
       runCoordinateConversion();
-      Serial.println(ledNumber);
 //      leds[ledNumber] = CRGB::Blue;     
 //      FastLED.show();
 //      delay(100);
