@@ -53,7 +53,7 @@ void draw() {
       float z = map(b, 0, 255, 255, -250);
       
       if (d > minThresh && d < maxThresh) {
-        String data = "x" + x + ",y" + y/* + ",d" + d*/;
+        String data = "x" + x + ",y" + y + ",d" + d;
         //System.out.println(data);
         serialConnection.write(data);
         delay(100);
