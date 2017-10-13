@@ -54,7 +54,7 @@ void draw() {
       
       if (d > minThresh && d < maxThresh) {
         String data = "x" + x + ",y" + y + ",d" + d;
-        //System.out.println(data);
+        System.out.println(data);
         serialConnection.write(data);
         delay(100);
         //if (serialConnection.readString() != null) {
