@@ -12,6 +12,12 @@
 // NUMBER_OF_LEDS = (NUM_LEDS - (LED_START + LED_END));
 #define NUMBER_OF_LEDS 190
 #define LED_DELAY 100
+//CRGB leds[NUMBER_OF_LEDS];
+
+// For multiple LED strips
+#define NUM_STRIPS 5
+#define NUM_LEDS_PER_STRIP NUMBER_OF_LEDS
+CRGB leds[NUM_STRIPS][NUM_LEDS_PER_STRIP];
 
 
 /*
@@ -21,11 +27,9 @@
 float skipX = 12.8;
 float skipY = 25.2632;
 
-float minThresh = 150;
+float minThresh = 50;
 float maxThresh = 500;
 float threshRange = maxThresh - minThresh;
-
-CRGB leds[NUMBER_OF_LEDS];
 
 /*
  * Variables
@@ -34,7 +38,7 @@ int x, y, d = -1;
 int convertedX, convertedY, convertedD;
 int ledX, ledY;
 int ledNumber;
-int ledNumbers[NUMBER_OF_LEDS];
+int ledNumbers[NUMBER_OF_LEDS][2];
 int ledNumbersIndex = 0;
 int panelNumber;
 
@@ -44,7 +48,16 @@ String readString;
  * Setup with LED Strips and Serial
  */
 void setup() { 
+  // One LED Strip
 //  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUMBER_OF_LEDS);
+
+  // Multiple LED Strips
+  FastLED.addLeds<NEOPIXEL, 6>(leds[0], NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 7>(leds[1], NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 8>(leds[2], NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 9>(leds[3], NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 10>(leds[4], NUM_LEDS_PER_STRIP);
+  
   Serial.begin(9600);
 }
 
@@ -82,22 +95,27 @@ void loop() {
     readString = "";
 
     // When all coordinates have been sent through can convert them
-    if (x != -1 && y != -1 && d != -1) {
+    if (/*x != -1 && y != -1 && */d != -1) {
       // Run conversion and turn on led
-      runCoordinateConversion();
+//      runCoordinateConversion();
       convertDepthToRgbAndTurnOnLed(d);
 
       // Record which led's have been turned on
-      ledNumbers[ledNumbersIndex] = ledNumber;
+      ledNumbers[ledNumbersIndex][0] = ledNumber;
+      ledNumbers[ledNumbersIndex][1] = panelNumber;
       ledNumbersIndex++;
 
       // When the led array index reaches the max (currently set to 1 panels worth of LEDs)
       // turn the off first LED and set the index back to the first led
       if (ledNumbersIndex == NUMBER_OF_LEDS) {
         ledNumbersIndex = 0;
-//        ledOff(0);
+        int ledAddressToTurnOff = ledNumbers[ledNumbersIndex][0];
+        int panelForLedToTurnOff = ledNumbers[ledNumbersIndex][1];
+        ledOff(ledAddressToTurnOff, panelForLedToTurnOff);
       } else {
-//        ledOff(ledNumbersIndex + 1);
+        int ledAddressToTurnOff = ledNumbers[ledNumbersIndex][0];
+        int panelForLedToTurnOff = ledNumbers[ledNumbersIndex][1];
+        ledOff(ledAddressToTurnOff, panelForLedToTurnOff);
       }
 
       // Set coorindates back to -1 so we can track them again from Kinect
@@ -223,56 +241,23 @@ int applyLedStartingOffset(int ledAddress) {
 /*
  * Turns an LED off
  */
-void ledOff(int i) {
+void ledOff(int i, int panelNumber) {
   // This is needed to skip the first number of LEDs
-  i += LED_START;
+  ledNumber = applyLedStartingOffset(ledNumber);
   
-  leds[i] = CRGB::Black;
+  leds[panelNumber - 1][ledNumber] = CRGB::Black;
   FastLED.show();
   delay(LED_DELAY);  
-}
-
-/*
- * Turns an LED on with the color Blue
- */
-void ledOnBlue(int i) {
-  // This is needed to skip the first number of LEDs
-  i += LED_START;
-  
-  leds[i] = CRGB::Blue;
-  FastLED.show();
-  delay(LED_DELAY);
-}
-
-/*
- * Turns an LED on with the color Green
- */
-void ledOnGreen(int i) {
-  i = applyLedStartingOffset(i);
-  
-  leds[i] = CRGB::Green;
-  FastLED.show();
-  delay(LED_DELAY);
-}
-
-/*
- * Turns an LED on with the color Red
- */
-void ledOnRed(int i) {  
-  i = applyLedStartingOffset(i);
-  
-  leds[i] = CRGB::Red;
-  FastLED.show();
-  delay(LED_DELAY);
 }
 
 /*
  * Turns an LED on with the color Red
  */
 void ledOnRgb(int r, int g, int b) {  
-  i = applyLedStartingOffset(i);
-  
-  leds[i].setRGB(r, g, b);
+  ledNumber = applyLedStartingOffset(ledNumber);
+
+//  leds[ledNumber].setRGB(r, g, b);
+  leds[panelNumber - 1][ledNumber].setRGB(r, g, b);
   FastLED.show();
   delay(LED_DELAY);
 }
@@ -282,14 +267,14 @@ void ledOnRgb(int r, int g, int b) {
  */
 void convertDepthToRgbAndTurnOnLed(int depth) {
   // red is depth mapped from low to high e.g. closer = redder
-  int r = map(depth, minThresh, maxThresh, 0, 255);
+  int r = map(depth, maxThresh, minThresh, 0, 255);
 
   // green can be used if needed
 //  int g = map(depth, minThresh, maxThresh, 0, 255);
-  int g = 100;
+  int g = 50;
 
   // red is depth mapped from high to low e.g. further away = bluer
-  int b = map(depth, maxThresh, minThresh, 0, 255);
+  int b = map(depth, minThresh, maxThresh, 0, 255);
   ledOnRgb(r, g, b);
 }
 
