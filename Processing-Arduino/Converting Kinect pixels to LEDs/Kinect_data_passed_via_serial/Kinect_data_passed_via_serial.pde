@@ -10,8 +10,8 @@ Serial serialConnection;
 Arduino arduino;
 int arduinoPort = 3;
 
-float minThresh = 150;
-float maxThresh = 500;
+float minThresh = 400;
+float maxThresh = 900;
 float threshRange = maxThresh - minThresh;
 float skipX = 12.8;
 float skipY = 25.2632;
@@ -21,6 +21,7 @@ void setup() {
   size(512, 424, P3D);
   kinect = new Kinect(this);
   kinect.initDepth();
+  kinect.setTilt(-35);
   
   printArray(Serial.list());
   
@@ -56,7 +57,7 @@ void draw() {
         String data = "x" + x + ",y" + y + ",d" + d;
         System.out.println(data);
         serialConnection.write(data);
-        delay(100);
+        delay(200);
         //if (serialConnection.readString() != null) {
         if (serialConnection.available() > 0) {
           System.out.println(serialConnection.readString());
