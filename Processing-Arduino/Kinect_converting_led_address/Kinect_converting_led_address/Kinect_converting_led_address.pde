@@ -21,11 +21,13 @@ int convertedX;
 int convertedY;
 int ledAddress;
 
+int[][] testData = {{150,450}};
+
 void setup() {
   // Rendering in P3D
   size(512, 424, P3D);
-  kinect = new Kinect(this);
-  kinect.initDepth();
+  //kinect = new Kinect(this);
+  //kinect.initDepth();
   //kinect.setTilt(-35);
   
   printArray(Serial.list());
@@ -36,7 +38,7 @@ void setup() {
 
 void draw() {
 
-  background(0);
+  /*background(0);
 
   PImage img = kinect.getDepthImage();
   int[] depth = kinect.getRawDepth();
@@ -95,10 +97,23 @@ void draw() {
   //if (serialConnection.available() > 0) {
   //  System.out.println(serialConnection.readString());
   //}
+  */
+  for (int x = 0; x < 200; x++) {
+    int ledAddress = runCoordinateConversion(testData[0][0], testData[0][1]);
+    int avgD = 300;
+    String data = "l" + ledAddress + ",p" + panelNumber + ",d" + avgD;
+    //System.out.println(data);
+    serialConnection.write(data);
+    delay(200);
+    if (serialConnection.available() > 0) {
+      //System.out.println(serialConnection.readString());
+    }
+  }        
 }
 
 int runCoordinateConversion(float x, float y) {   
-  convertCoordinate(x, y);    
+  convertCoordinate(x, y);   
+  setPanel();
   return calculateLedAddress();
 }
 
@@ -132,17 +147,17 @@ int convertLedX() {
 }
 
 void setPanel() {
-    if (convertedX >= 1 && convertedX <= 10) {
-      panelNumber = 0;
-    } else if (convertedX >= 1 && convertedX <= 10) {
-      panelNumber = 1;
-    } else if (convertedX >= 21 && convertedX <= 30) {
-      panelNumber = 2;
-    } else if (convertedX >= 31 && convertedX <= 40) {
-      panelNumber = 3;
-    } else if (convertedX >= 41 && convertedX <= 50) {
-      panelNumber = 4;
-    }
+  if (convertedX >= 1 && convertedX <= 10) {
+    panelNumber = 0;
+  } else if (convertedX >= 11 && convertedX <= 10) {
+    panelNumber = 1;
+  } else if (convertedX >= 21 && convertedX <= 30) {
+    panelNumber = 2;
+  } else if (convertedX >= 31 && convertedX <= 40) {
+    panelNumber = 3;
+  } else if (convertedX >= 41 && convertedX <= 50) {
+    panelNumber = 4;
+  }
 }
 
 void convertCoordinate(float x, float y) {
@@ -151,7 +166,7 @@ void convertCoordinate(float x, float y) {
   convertedY = convertY(y);  
 }
 
-int convertX(float x) {     
+int convertX(float x) {  
   return ceil((x / skipX));
 }
 
