@@ -101,10 +101,10 @@ void draw() {
   for (int x = 0; x < 1; x++) {
     //int ledAddress = runCoordinateConversion(testData[0][0], testData[0][1]);
     int avgD = 600;
-    String data = "l" + 25 + ",p" + 0 + ",d" + avgD;
-    System.out.println(data);
-    serialConnection.write(data);
-    delay(200);
+    String data = "l" + 31 + ",p" + 1 + ",d" + avgD;
+    //System.out.println(data);
+    serialConnection.write(data); 
+    delay(500);
     if (serialConnection.available() > 0) {
       System.out.println(serialConnection.readString());
     }
