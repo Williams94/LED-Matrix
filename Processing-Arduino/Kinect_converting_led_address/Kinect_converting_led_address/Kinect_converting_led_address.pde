@@ -8,7 +8,7 @@ import processing.serial.*;
 Kinect kinect;
 Serial serialConnection;
 Arduino arduino;
-int arduinoPort = 3;
+int arduinoPort = 7;
 
 float minThresh = 400;
 float maxThresh = 900;
@@ -26,8 +26,8 @@ int[][] testData = {{100,450}};
 void setup() {
   // Rendering in P3D
   size(512, 424, P3D);
-  //kinect = new Kinect(this);
-  //kinect.initDepth();
+  kinect = new Kinect(this);
+  kinect.initDepth();
   //kinect.setTilt(-35);
   
   printArray(Serial.list());
@@ -38,7 +38,7 @@ void setup() {
 
 void draw() {
 
-  /*background(0);
+  background(0);
 
   PImage img = kinect.getDepthImage();
   int[] depth = kinect.getRawDepth();
@@ -83,32 +83,43 @@ void draw() {
         //popMatrix();
       }
     }
-  }  
+  }     
   
-  float avgX = sumX / totalPixels;
-  float avgY = sumY / totalPixels;
-  float avgD = sumD / totalPixels; 
-  int ledAddress = runCoordinateConversion(avgX, avgY);
- 
-  System.out.println("x" + avgX + ",y" + avgY + ",d" + avgD + ",l" + ledAddress);
-  String data = "l" + ledAddress + "p" + panelNumber + "d" + avgD;
-  serialConnection.write(data);
-  //delay(200);        
-  //if (serialConnection.available() > 0) {
-  //  System.out.println(serialConnection.readString());
-  //}
-  */
-  for (int x = 0; x < 1; x++) {
-    //int ledAddress = runCoordinateConversion(testData[0][0], testData[0][1]);
-    int avgD = 600;
-    String data = "l" + 25 + ",p" + 0 + ",d" + avgD;
+  if (totalPixels > 0) {     
+    float avgX = sumX / totalPixels;
+    float avgY = sumY / totalPixels;
+    int avgD = (int)sumD / (int)totalPixels; 
+    int ledAddress = runCoordinateConversion(avgX, avgY);
+   
+    //System.out.println("x" + avgX + ",y" + avgY + ",d" + avgD + ",l" + ledAddress);
+    String data = "l" + ledAddress + ",p" + panelNumber + ",d" + avgD;
     System.out.println(data);
-    serialConnection.write(data);
-    delay(200);
+    serialConnection.write(data);  
+    delay(50);        
     if (serialConnection.available() > 0) {
       System.out.println(serialConnection.readString());
     }
-  }        
+  }/* else {
+    String data = "l" + -1 + ",p" + -1 + ",d" + -1 + ",n" + 1;
+    System.out.println(data);
+    serialConnection.write(data);
+    delay(50);
+    if (serialConnection.available() > 0) {
+      System.out.println(serialConnection.readString());
+    }
+  }*/
+  
+  /*for (int x = 0; x < 1; x++) {
+    //int ledAddress = runCoordinateConversion(testData[0][0], testData[0][1]);
+    int avgD = 600;
+    String data = "l" + 31 + ",p" + 1 + ",d" + avgD;
+    //System.out.println(data);
+    serialConnection.write(data); 
+    delay(500);
+    if (serialConnection.available() > 0) {
+      System.out.println(serialConnection.readString());
+    }
+  }*/        
 }
 
 int runCoordinateConversion(float x, float y) {   

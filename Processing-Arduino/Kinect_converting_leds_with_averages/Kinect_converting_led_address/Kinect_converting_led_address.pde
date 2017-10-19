@@ -26,8 +26,8 @@ int[][] testData = {{100,450}};
 void setup() {
   // Rendering in P3D
   size(512, 424, P3D);
-  //kinect = new Kinect(this);
-  //kinect.initDepth();
+  kinect = new Kinect(this);
+  kinect.initDepth();
   //kinect.setTilt(-35);
   
   printArray(Serial.list());
@@ -38,7 +38,7 @@ void setup() {
 
 void draw() {
 
-  /*background(0);
+  background(0);
 
   PImage img = kinect.getDepthImage();
   int[] depth = kinect.getRawDepth();
@@ -62,15 +62,17 @@ void draw() {
       //float z = map(b, 0, 255, 255, -250);
       
       if (d > minThresh && d < maxThresh) {
-        sumX += x;
+        /*sumX += x;
         sumY += y;
         sumD += d;
-        totalPixels++;
+        totalPixels++;*/
         
+        int ledAddress = runCoordinateConversion(x, y);
+        String data = "l" + ledAddress + "p" + panelNumber + "d" + d;
         //String data = "x" + x + ",y" + y + ",d" + d;
-        //System.out.println(data);
-        //serialConnection.write(data);
-        //delay(200);        
+        System.out.println(data);
+        serialConnection.write(data);
+        delay(50);        
         //if (serialConnection.available() > 0) {
         //  System.out.println(serialConnection.readString());
         //}                  
@@ -85,20 +87,21 @@ void draw() {
     }
   }  
   
-  float avgX = sumX / totalPixels;
+  
+  /*float avgX = sumX / totalPixels;
   float avgY = sumY / totalPixels;
   float avgD = sumD / totalPixels; 
   int ledAddress = runCoordinateConversion(avgX, avgY);
  
   System.out.println("x" + avgX + ",y" + avgY + ",d" + avgD + ",l" + ledAddress);
   String data = "l" + ledAddress + "p" + panelNumber + "d" + avgD;
-  serialConnection.write(data);
+  serialConnection.write(data);*/
   //delay(200);        
   //if (serialConnection.available() > 0) {
   //  System.out.println(serialConnection.readString());
   //}
-  */
-  for (int x = 0; x < 1; x++) {
+  
+  /*for (int x = 0; x < 1; x++) {
     //int ledAddress = runCoordinateConversion(testData[0][0], testData[0][1]);
     int avgD = 600;
     String data = "l" + 31 + ",p" + 1 + ",d" + avgD;
@@ -108,7 +111,7 @@ void draw() {
     if (serialConnection.available() > 0) {
       System.out.println(serialConnection.readString());
     }
-  }        
+  }*/        
 }
 
 int runCoordinateConversion(float x, float y) {   

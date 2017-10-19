@@ -11,7 +11,7 @@
 // For multiple LED strips
 #define NUM_STRIPS 5
 #define NUM_LEDS_PER_STRIP NUMBER_OF_LEDS
-//CRGB leds[NUM_STRIPS][NUM_LEDS_PER_STRIP];
+CRGB leds[NUM_STRIPS][NUM_LEDS_PER_STRIP];
 //CRGB leds[NUM_LEDS_PER_STRIP];
 
 /*
@@ -38,6 +38,7 @@ int x, y, d = -1;
 int panelNumber = -1;
 int ledAddress = -1;
 int ledDisplayCount = 0;
+int ledsToTurnOn = 30;
 
 String readString;
 
@@ -49,11 +50,14 @@ void setup() {
 //  FastLED.addLeds<NEOPIXEL, 30>(leds, NUMBER_OF_LEDS);
 
   // Multiple LED Strips
-  /*FastLED.addLeds<NEOPIXEL, 22>(leds[0], NUM_LEDS_PER_STRIP);
+  FastLED.addLeds<NEOPIXEL, 22>(leds[0], NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 26>(leds[1], NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 30>(leds[2], NUM_LEDS_PER_STRIP);
   FastLED.addLeds<NEOPIXEL, 34>(leds[3], NUM_LEDS_PER_STRIP);
-  FastLED.addLeds<NEOPIXEL, 38>(leds[4], NUM_LEDS_PER_STRIP);*/
+  FastLED.addLeds<NEOPIXEL, 38>(leds[4], NUM_LEDS_PER_STRIP);
+
+//  turnOffAllLeds();
+//  FastLED.show();
   
   Serial.begin(9600);
 }
@@ -80,34 +84,33 @@ void loop() {
   if (readString.length() > 0) {
     if (readString.indexOf('l') == 0) {
       ledAddress = (readString.substring(readString.indexOf('l') + 1, readString.length())).toInt();
-//      Serial.println(ledAddress);
+      Serial.println("l" + (String)ledAddress);
     }
     if (readString.indexOf('p') == 0) {
       panelNumber = (readString.substring(readString.indexOf('p') + 1, readString.length())).toInt();
-//      Serial.println(panelNumber);
+      Serial.println("p" + (String)panelNumber);
     }
     if (readString.indexOf('d') == 0) {
       d = (readString.substring(readString.indexOf('d') + 1, readString.length())).toInt();
-//      Serial.println(d);
+      Serial.println("d" + (String)d);  
     }   
     readString = "";    
 
     if (panelNumber != -1 && ledAddress != -1 && d != -1) {
-//      Serial.println("l" + (String)ledAddress + "p" + (String)panelNumber + "d" + (String)d);
+      Serial.println("l" + (String)ledAddress + "p" + (String)panelNumber + "d" + (String)d);
       if (ledDisplayCount == 0) {
         turnOffAllLeds();
       }
-
-      Serial.println("l" + (String)ledAddress + "p" +  (String)panelNumber + "d" + (String)d);
       
       convertDepthToRgbAndTurnOnLed(d);
       ledDisplayCount++;
-      if (ledDisplayCount == 30) {   
-        Serial.println("Turning on 100 leds");
-//        FastLED.show();
-//        delay(LED_DELAY);
+      
+      if (ledDisplayCount == ledsToTurnOn) {        
+        FastLED.show();
+        delay(LED_DELAY);
         ledDisplayCount = 0;
       }
+      
       panelNumber, ledAddress, d = -1;
     }
   }
@@ -120,13 +123,18 @@ void loop() {
  ******************************************************************************************************/
 
  void turnOffAllLeds() {
-    for(int i = 0; i < NUM_LEDS_PER_STRIP; i++) {
-//      leds[0][i] = CRGB::Black;
-//      leds[1][i] = CRGB::Black;
-//      leds[2][i] = CRGB::Black;
-//      leds[3][i] = CRGB::Black;
-//      leds[4][i] = CRGB::Black;
-  }
+  fill_solid(leds[0], NUMBER_OF_LEDS, CRGB::Black);
+  fill_solid(leds[1], NUMBER_OF_LEDS, CRGB::Black);
+  fill_solid(leds[2], NUMBER_OF_LEDS, CRGB::Black);
+  fill_solid(leds[3], NUMBER_OF_LEDS, CRGB::Black);
+  fill_solid(leds[4], NUMBER_OF_LEDS, CRGB::Black);
+    /*for(int i = 0; i < NUM_LEDS_PER_STRIP; i++) {
+      leds[0][i] = CRGB::Black;
+      leds[1][i] = CRGB::Black;
+      leds[2][i] = CRGB::Black;
+      leds[3][i] = CRGB::Black;
+      leds[4][i] = CRGB::Black;
+    }*/
  }
 
 /*
@@ -142,8 +150,8 @@ void ledOff(int i, int panelNumber) {
  * Turns an LED on with the color Red
  */
 void ledOnRgb(int r, int g, int b) {  
-//  Serial.println("p" + (String)panelNumber + "l" + (String)ledAddress);
-//  leds[panelNumber][ledAddress].setRGB(r, g, b);
+  Serial.println("p" + (String)panelNumber + "l" + (String)ledAddress);
+  leds[panelNumber][ledAddress].setRGB(r, g, b);
 }
 
 /*
