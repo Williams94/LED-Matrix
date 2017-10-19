@@ -74,6 +74,13 @@ void loop() {
     FastLED.show();
     start = false;
   }
+
+  if (!Serial.available()) {
+    allLedsRainbow();    
+  } else {
+    turnOffAllLeds();
+    FastLED.show();
+  }
   
   // Serial connection gets through the x, y and d coordinates
   while (Serial.available()) {    
@@ -109,8 +116,9 @@ void loop() {
       turnOffAllLeds();       
       ledBlob();
       FastLED.show();
-      delay(50);
+      delay(1000);
       panelNumber, ledAddress, d = -1;
+      Serial.flush();
     }
   }
 }
@@ -727,6 +735,15 @@ void testAllLeds() {
   fill_solid(leds[4], NUMBER_OF_LEDS, CRGB::Red);
   FastLED.show();
   delay(5000);
+}
+
+void allLedsRainbow() {
+  for (int i = 0; i < NUM_STRIPS; i++) {     
+    turnOffAllLeds();
+    fill_rainbow(leds[i], NUMBER_OF_LEDS, 0);    
+    FastLED.show();
+    delay(500);
+  }
 }
 
 void testAllLedsRainbow() {
