@@ -38,6 +38,7 @@ int panelNumber = -1;
 int ledAddress = -1;
 int blobSize = 100;
 int debugOn = false;
+int ledIncrease = 5;
 
 String readString;
 
@@ -166,14 +167,14 @@ void turnOnLedsInPreviousPanelForEvenRow(int mod, int r, int g, int b) {
 
 //  Serial.println("p" + (String)(panelNumber - 1));
   
-  for (int i = previousPanelStartLed; count < (5 - mod); i++) {
+  for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
     count++;
   }
   count = 0;
-  for (int i = previousPanelStartLed; count < (5 - mod); i--) {   
+  for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -183,14 +184,14 @@ void turnOnLedsInPreviousPanelForEvenRow(int mod, int r, int g, int b) {
 //  if ((previousPanelStartLed + 20) < NUMBER_OF_LEDS) {    
     previousPanelStartLed = (previousPanelStartLed + 20);
     count = 0;
-    for (int i = previousPanelStartLed; count < (5 - mod); i++) {     
+    for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i++) {     
 //      Serial.println(i);
 //      leds[panelNumber - 1][i].setRGB(r, g, b);
       ledOnRgb(r, g, b, panelNumber - 1, i);
       count++;
     }
     count = 0;
-    for (int i = previousPanelStartLed; count < (5 - mod); i--) {         
+    for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i--) {         
 //      Serial.println(i);
 //      leds[panelNumber - 1][i].setRGB(r, g, b);
       ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -201,14 +202,14 @@ void turnOnLedsInPreviousPanelForEvenRow(int mod, int r, int g, int b) {
 //  if ((ledAddress - 20) > 0) {
     previousPanelStartLed = ((ledAddress + (10 - mod)) - 20);
     count = 0;
-    for (int i = previousPanelStartLed; count < (5 - mod); i++) {
+    for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i++) {
 //      Serial.println(i);
 //      leds[panelNumber - 1][i].setRGB(r, g, b);     
       ledOnRgb(r, g, b, panelNumber - 1, i);
       count++;
     }
     count = 0;
-    for (int i = previousPanelStartLed; count < (5 - mod); i--) {         
+    for (int i = previousPanelStartLed; count < ((5 - mod) + ledIncrease); i--) {         
 //      Serial.println(i);
 //      leds[panelNumber - 1][i].setRGB(r, g, b);
       ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -223,14 +224,14 @@ void turnOnLedsInNextPanelForEvenRow(int mod, int r, int g, int b) {
 
 //  Serial.println("p" + (String)(panelNumber + 1));
   
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -239,14 +240,14 @@ void turnOnLedsInNextPanelForEvenRow(int mod, int r, int g, int b) {
     
   nextPanelStartLed = (((10 - mod) + ledAddress) + 10);
   count = 0;
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -255,14 +256,14 @@ void turnOnLedsInNextPanelForEvenRow(int mod, int r, int g, int b) {
 
   nextPanelStartLed = (((10 - mod) + ledAddress) - 10);
   count = 0;
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -278,14 +279,14 @@ void turnOnLedsInThisPanelForEvenRowUsingNextPanel(int mod, int r, int g, int b)
 //  Serial.println("m" + (String)mod);
 //  Serial.println("l" + (String)thisPanelsStartLed);
   
-  for (int i = thisPanelsStartLed; count < ((10 - mod) + 3); i++) {  
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i++) {  
 //    Serial.println(i);  
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (10 - mod); i--) {
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i--) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -294,14 +295,14 @@ void turnOnLedsInThisPanelForEvenRowUsingNextPanel(int mod, int r, int g, int b)
   
   thisPanelsStartLed = ((ledAddress) + 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) + 1); i++) {
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (10 - mod); i--) {    
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -310,14 +311,14 @@ void turnOnLedsInThisPanelForEvenRowUsingNextPanel(int mod, int r, int g, int b)
 
   thisPanelsStartLed = ((ledAddress) - 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) + 3); i++) {
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (10 - mod); i--) {    
+  for (int i = thisPanelsStartLed; count < ((10 - mod) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -333,14 +334,14 @@ void turnOnLedsInThisPanelForEvenRowUsingPreviousPanel(int mod, int r, int g, in
 //  Serial.println("m" + (String)mod);
 //  Serial.println("l" + (String)thisPanelsStartLed);
   
-  for (int i = thisPanelsStartLed; count < (mod - 1); i++) {  
+  for (int i = thisPanelsStartLed; count < ((mod - 1) + ledIncrease); i++) {  
 //    Serial.println(i);  
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -349,14 +350,14 @@ void turnOnLedsInThisPanelForEvenRowUsingPreviousPanel(int mod, int r, int g, in
   
   thisPanelsStartLed = ((ledAddress) + 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod - 1); i++) {
+  for (int i = thisPanelsStartLed; count < ((mod - 1) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {    
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -365,14 +366,14 @@ void turnOnLedsInThisPanelForEvenRowUsingPreviousPanel(int mod, int r, int g, in
 
   thisPanelsStartLed = ((ledAddress) - 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod - 1); i++) {
+  for (int i = thisPanelsStartLed; count < ((mod - 1) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {    
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -381,8 +382,8 @@ void turnOnLedsInThisPanelForEvenRowUsingPreviousPanel(int mod, int r, int g, in
 }
 
 void turnOnLedsInThisPanelForMiddleValue(int mod, int r, int g, int b) {
-  int thisPanelsStartLed = ledAddress - 25;
-  int thisPanelsEndLed = ledAddress + 25;
+  int thisPanelsStartLed = ledAddress - 35;
+  int thisPanelsEndLed = ledAddress + 35;
   int count = 0;
 
 //  Serial.println("p" + (String)panelNumber);
@@ -406,14 +407,14 @@ void turnOnLedsInNextPanelForOddRow(int mod, int r, int g, int b) {
 
 //  Serial.println("p" + (String)(panelNumber + 1));
   
-  for (int i = nextPanelStartLed; count <= (5 - mod); i++) {
+  for (int i = nextPanelStartLed; count <= ((5 - mod) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (5 - mod); i--) {   
+  for (int i = nextPanelStartLed; count < ((5 - mod) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -422,14 +423,14 @@ void turnOnLedsInNextPanelForOddRow(int mod, int r, int g, int b) {
     
   nextPanelStartLed = (((10 - mod) + ledAddress) + 20);
   count = 0;
-  for (int i = nextPanelStartLed; count <= 1; i++) {
+  for (int i = nextPanelStartLed; count <= 5; i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (5 - mod); i--) {   
+  for (int i = nextPanelStartLed; count < ((5 - mod) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -438,14 +439,14 @@ void turnOnLedsInNextPanelForOddRow(int mod, int r, int g, int b) {
 
   nextPanelStartLed = (((10 - mod) + ledAddress) - 20);
   count = 0;
-  for (int i = nextPanelStartLed; count <= (5 - mod); i++) {
+  for (int i = nextPanelStartLed; count <= ((5 - mod) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < 1; i--) {   
+  for (int i = nextPanelStartLed; count < 5; i--) {   
 //    Serial.println(i);
 //    leds[panelNumber + 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber + 1, i);
@@ -464,14 +465,14 @@ void turnOnLedsInThisPanelForOddRowUsingNextPanel(int mod, int r, int g, int b) 
     newMod = 3;
   }
   
-  for (int i = thisPanelsStartLed; count < (newMod - 1); i++) {  
+  for (int i = thisPanelsStartLed; count < ((newMod - 1) + ledIncrease); i++) {  
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -480,14 +481,14 @@ void turnOnLedsInThisPanelForOddRowUsingNextPanel(int mod, int r, int g, int b) 
   
   thisPanelsStartLed = ((ledAddress) + 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < (newMod - 1); i++) {
+  for (int i = thisPanelsStartLed; count < ((newMod - 1) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {    
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -496,14 +497,14 @@ void turnOnLedsInThisPanelForOddRowUsingNextPanel(int mod, int r, int g, int b) 
 
   thisPanelsStartLed = ((ledAddress) - 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < (newMod - 1); i++) {
+  for (int i = thisPanelsStartLed; count < ((newMod - 1) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < (mod * 2); i--) {    
+  for (int i = thisPanelsStartLed; count < ((mod * 2) + ledIncrease); i--) {    
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -517,14 +518,14 @@ void turnOnLedsInPreviousPanelForOddRow(int mod, int r, int g, int b) {
 
 //  Serial.println("l" + (String)(nextPanelStartLed));
   
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -533,14 +534,14 @@ void turnOnLedsInPreviousPanelForOddRow(int mod, int r, int g, int b) {
     
   nextPanelStartLed = ((ledAddress - mod) + 20);
   count = 0;
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -549,14 +550,14 @@ void turnOnLedsInPreviousPanelForOddRow(int mod, int r, int g, int b) {
 
   nextPanelStartLed = ((ledAddress - mod) - 20);
   count = 0;
-  for (int i = nextPanelStartLed; count <= (mod - 5); i++) {
+  for (int i = nextPanelStartLed; count <= ((mod - 5) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
     count++;
   }
   count = 0;
-  for (int i = nextPanelStartLed; count < (mod - 5); i--) {   
+  for (int i = nextPanelStartLed; count < ((mod - 5) + ledIncrease); i--) {   
 //    Serial.println(i);
 //    leds[panelNumber - 1][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber - 1, i);
@@ -570,14 +571,14 @@ void turnOnLedsInThisPanelForOddRowUsingPreviousPanel(int mod, int r, int g, int
 
 //  Serial.println("p" + (String)panelNumber);
   
-  for (int i = thisPanelsStartLed; count < ((11 - mod) * 2); i++) {  
+  for (int i = thisPanelsStartLed; count < (((11 - mod) * 2) + ledIncrease); i++) {  
 //    Serial.println(i);  
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) - 1); i--) {
+  for (int i = thisPanelsStartLed; count < (((10 - mod) - 1) + ledIncrease); i--) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -586,14 +587,14 @@ void turnOnLedsInThisPanelForOddRowUsingPreviousPanel(int mod, int r, int g, int
   
   thisPanelsStartLed = ((ledAddress) + 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) * 2); i++) {
+  for (int i = thisPanelsStartLed; count < (((10 - mod) * 2) + ledIncrease); i++) {
 //    Serial.println(i);
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) - 1); i--) {    
+  for (int i = thisPanelsStartLed; count < (((10 - mod) - 1) + ledIncrease); i--) {    
 //    Serial.println(i);  
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
@@ -602,14 +603,14 @@ void turnOnLedsInThisPanelForOddRowUsingPreviousPanel(int mod, int r, int g, int
 
   thisPanelsStartLed = ((ledAddress) - 20);
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((11 - mod) * 2); i++) {
+  for (int i = thisPanelsStartLed; count < (((11 - mod) * 2) + ledIncrease); i++) {
 //    Serial.println(i);    
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
     count++;
   }
   count = 0;
-  for (int i = thisPanelsStartLed; count < ((10 - mod) - 1); i--) {    
+  for (int i = thisPanelsStartLed; count < (((10 - mod) - 1) + ledIncrease); i--) {    
 //    Serial.println(i);    
 //    leds[panelNumber][i].setRGB(r, g, b);
     ledOnRgb(r, g, b, panelNumber, i);
