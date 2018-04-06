@@ -1,3 +1,6 @@
+# LED Wall
+![LED Wall](https://github.com/Williams94/LED-Matrix/blob/master/led%20wall.jpg "LED Wall")
+
 # Processing-Kinect-Arduino
 
 Processing-Arduino directory contains the projects main files, with a Tests directory for setup tests.
