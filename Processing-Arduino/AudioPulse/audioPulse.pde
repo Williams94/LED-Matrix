@@ -21,7 +21,7 @@ void setup() {
   in = minim.getLineIn(Minim.STEREO, 512);
   String portName = Serial.list()[1]; // change this to match the arduino, usually 1 - remove the [1] to see a full list
   println(portName);
-  myPort = new Serial(this, portName, 9600);
+  myPort = new Serial(this, portName, 9600); //will take a while to send 2000 bytes over 9600 bits per second 
   myPort.bufferUntil('\n');
 }
 
